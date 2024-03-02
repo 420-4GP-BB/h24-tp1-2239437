@@ -20,8 +20,8 @@ public class OutOfBounds : MonoBehaviour
         
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter(Collider other)
     {
-        if (collision.gameObject.tag == "Player") { OutOfBoundsCollision?.Invoke();  }
+        if (other.gameObject.tag == "Player") { OutOfBoundsCollision?.Invoke(); }
     }
 }

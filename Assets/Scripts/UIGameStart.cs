@@ -9,7 +9,6 @@ public class TextFade : MonoBehaviour
     public TextMeshProUGUI text;
     public GameObject overheadCamera;
     public GameObject playerCamera;
-    public GameObject hitBar;
     bool fadeDone = false;
 
     // Start is called before the first frame update
@@ -27,7 +26,6 @@ public class TextFade : MonoBehaviour
             text.alpha = -1;
             playerCamera.SetActive(true);
             overheadCamera.SetActive(false);
-            hitBar.SetActive(true);
         }
     }
 
