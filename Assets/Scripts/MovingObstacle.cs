@@ -8,13 +8,7 @@ public class MovingObstacle : MonoBehaviour
     [SerializeField] private bool moveDirection = true;
     [SerializeField] private float moveSpeed = 0.5f;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
+    //Deplace les obstacles de droite a gauche
     void Update()
     {
         if (moveDirection == true)
@@ -22,7 +16,7 @@ public class MovingObstacle : MonoBehaviour
             if (obstacle.transform.position.x >= -21.25f) { moveDirection = false; }
             else
             {
-                obstacle.transform.position += new Vector3(1,0,0) * moveSpeed * Time.deltaTime;
+                obstacle.transform.position += new Vector3(1, 0, 0) * moveSpeed * Time.deltaTime;
             }
         }
         else

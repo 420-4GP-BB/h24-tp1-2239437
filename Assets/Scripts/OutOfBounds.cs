@@ -8,18 +8,7 @@ public class OutOfBounds : MonoBehaviour
 
     public event Action OutOfBoundsCollision;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
+    //Detecte une collision avec le joueur
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "Player") { OutOfBoundsCollision?.Invoke(); }

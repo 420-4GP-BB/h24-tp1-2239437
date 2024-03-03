@@ -4,34 +4,41 @@ using UnityEngine;
 
 public class CameraMovement : MonoBehaviour
 {
-    [SerializeField] private ballControler player;
+    [SerializeField] private KeyLogger _keyLogger;
     [SerializeField] private Camera camera;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    [SerializeField] private GameObject target;
 
     private void OnEnable()
     {
-        player.CameraCloser += CameraCloser;
-        player.CameraFurther += CameraFurther;
+        _keyLogger.WPress += CameraCloser;
+        _keyLogger.SPress += CameraFurther;
+
+        _keyLogger.APress += TurnLeft;
+        _keyLogger.DPress += TurnRight;
     }
 
-    private void CameraCloser() 
+    //Tourne la camera a droite
+    private void TurnRight()
     {
-        camera.transform.position += new Vector3(0f, -0.2f, 1f) * Time.deltaTime;
+        camera.transform.RotateAround(target.transform.position, new Vector3(0f, 1f, 0f), 1f);
     }
 
-    private void CameraFurther() 
+    //Tourne la camera a gauche
+    private void TurnLeft()
     {
-        camera.transform.position -= new Vector3(0f, -0.2f, 1f) * Time.deltaTime;
+        camera.transform.RotateAround(target.transform.position, new Vector3(0f, 1f, 0f), -1f);
+    }
+
+    //Rapproche la camera 
+    private void CameraCloser()
+    {
+        camera.transform.position += camera.transform.forward * Time.deltaTime;
+    }
+
+    //Eloigne la camera
+    private void CameraFurther()
+    {
+        camera.transform.position -= camera.transform.forward * Time.deltaTime; 
     }
 
 }

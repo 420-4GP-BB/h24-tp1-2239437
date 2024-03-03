@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -6,42 +7,52 @@ using UnityEngine.UI;
 
 public class TextFade : MonoBehaviour
 {
-    public TextMeshProUGUI text;
+    [SerializeField] private KeyLogger _keyLogger;
+    public TextMeshProUGUI startText;
     public GameObject overheadCamera;
     public GameObject playerCamera;
     bool fadeDone = false;
 
-    // Start is called before the first frame update
+    public event Action gameStart;
+
+    //Demmare la coroutine du texte de debut
     void Start()
     {
-        StartCoroutine(FadeInText(text));
+        _keyLogger.LeftClick += CommencerPartie;
+        StartCoroutine(FadeInText(startText));
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if (fadeDone || Input.GetMouseButtonDown(0)) 
+        if (fadeDone)
         {
-            fadeDone = true;
-            text.alpha = -1;
-            playerCamera.SetActive(true);
-            overheadCamera.SetActive(false);
+            CommencerPartie();
         }
+    }
+
+    //Efface le texte puis change la camera
+    private void CommencerPartie() 
+    {
+        fadeDone = true;
+        startText.alpha = -1;
+        playerCamera.SetActive(true);
+        overheadCamera.SetActive(false);
+        gameStart?.Invoke();
     }
 
     private IEnumerator FadeInText(TextMeshProUGUI text)
     {
-        
-        if (fadeDone == false) 
+
+        if (fadeDone == false)
         {
             text.color = new Color(text.color.r, text.color.g, text.color.b, 0);
             while (text.color.a < 1.0f)
             {
-                text.color = new Color(text.color.r, text.color.g, text.color.b, text.color.a + (Time.deltaTime/2));
+                text.color = new Color(text.color.r, text.color.g, text.color.b, text.color.a + (Time.deltaTime / 2));
                 yield return null;
             }
             yield return new WaitForSeconds(1f);
-           
+
         }
         fadeDone = true;
     }
