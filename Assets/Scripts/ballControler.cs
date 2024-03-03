@@ -33,7 +33,7 @@ public class ballControler : MonoBehaviour
     private int currentLevel = 1;
 
     private Vector3 oldPosition;
-    
+
 
     void Start()
     {
@@ -60,8 +60,6 @@ public class ballControler : MonoBehaviour
     void Update()
     {
         player.transform.position = Vector3.MoveTowards(player.transform.position, ball.transform.position, 10f);
-
-        
     }
 
     private void GameStart() { gameStart = true; }
@@ -69,7 +67,7 @@ public class ballControler : MonoBehaviour
     //Charge le tir
     public void ChargeShot()
     {
-        if (canShoot && gameStart) 
+        if (canShoot && gameStart)
         {
             hitBar.SetActive(true);
 
@@ -99,7 +97,7 @@ public class ballControler : MonoBehaviour
     {
         if (canShoot && gameStart)
         {
-            rb.AddForce(camera.transform.forward * (hitForce * 8f), ForceMode.Impulse);
+            rb.AddForce(new Vector3(camera.transform.forward.x, 0, camera.transform.forward.z) * (hitForce * 15f), ForceMode.Impulse);
             hitBar.transform.localScale = new Vector3(0.2f, 0f, 0.1f);
             hitForce = 0;
             hitBar.SetActive(false);
@@ -197,9 +195,9 @@ public class ballControler : MonoBehaviour
     private void StartLvlTwo() { currentLevel = 2; }
     private void StartLvlThree() { currentLevel = 3; }
 
-    private void LvlDone() 
+    private void LvlDone()
     {
-        switch (currentLevel) 
+        switch (currentLevel)
         {
             case 1:
                 rb.isKinematic = true;
@@ -219,23 +217,47 @@ public class ballControler : MonoBehaviour
                 break;
             case 3:
                 gameDone?.Invoke();
+                GameDone();
                 break;
-        
+
         }
+    }
+
+    private void GameDone()
+    {
+        canShoot = false;
+        ball.SetActive(false);
+        hitBar.SetActive(false);
     }
 
     IEnumerator CheckPosition()
     {
         while (true)
         {
-            yield return new WaitForSeconds(.5f);
+            yield return new WaitForSeconds(.3f);
             Vector3 newPosition = ball.transform.position;
 
             if (oldPosition == newPosition)
             {
+                Collider[] colliderList = Physics.OverlapSphere(newPosition, ball.GetComponent<SphereCollider>().radius);
+                foreach (Collider collider in colliderList) 
+                {
+                    if (collider.gameObject.tag == "Wall")
+                    {
+                        Debug.Log("o");
+                        rb.isKinematic = true;
+                        while (Vector3.Distance(ball.transform.position, collider.ClosestPoint(ball.transform.position)) < (ball.GetComponent<SphereCollider>().radius * 2)) 
+                        {
+                            ball.transform.LookAt(collider.ClosestPoint(ball.transform.position));
+                            ball.transform.Rotate(0, 180, 0);
+                            ball.transform.Translate(Vector3.forward);
+                            yield return new WaitForSeconds(1);
+                        }
+                        rb.isKinematic = false;
+                    }
+                }
                 canShoot = true;
             }
-
             oldPosition = newPosition;
         }
     }

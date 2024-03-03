@@ -38,7 +38,7 @@ public class CameraMovement : MonoBehaviour
     //Eloigne la camera
     private void CameraFurther()
     {
-        camera.transform.position -= camera.transform.forward * Time.deltaTime; 
+        camera.transform.position -= camera.transform.forward * Time.deltaTime;
     }
 
 }

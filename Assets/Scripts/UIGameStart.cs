@@ -31,7 +31,7 @@ public class TextFade : MonoBehaviour
     }
 
     //Efface le texte puis change la camera
-    private void CommencerPartie() 
+    private void CommencerPartie()
     {
         fadeDone = true;
         startText.alpha = -1;

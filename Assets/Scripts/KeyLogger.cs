@@ -18,11 +18,6 @@ public class KeyLogger : MonoBehaviour
     public event Action ZeroTap;
     public event Action LeftClick;
 
-    private void Start()
-    {
-        
-    }
-
     //Ecoute les touches de clavier pour invoquer les differentes actions du joueur
     void Update()
     {
